@@ -18,17 +18,20 @@ The product gathers requirements and generates harness files. It does not promis
 
 * The product must accept requirements expressed in natural language.
 * It must gather enough information to define the requested harness, including its purpose, tasks, operating context, constraints, and desired outputs.
+* It must let the user select one or more task types: regular software development, a machine learning (ML) task, or a data science task. It must also offer an `Other/custom` option for work that does not fit these categories. The product must use the selection to guide follow-up questions and capture relevant requirements without overriding the user's specific needs.
+* For `Other/custom`, the product must ask focused questions to understand the task and its requirements. If it cannot support the clarified task, it must explain the limitation and must not present incomplete output as a complete harness.
 * The user must be able to choose Claude Code as the target agent or choose another agent supported by the product. If the target is unclear or unsupported, the product must ask for clarification or explain the limitation.
 * It must ask focused follow-up questions when required information is missing, ambiguous, or contradictory. It must not silently treat a material assumption as a confirmed requirement.
 * It must retain relevant answers during the current harness-creation session and use them consistently in generated files.
 * Before generation, it must summarize the captured requirements and surface unresolved assumptions or choices that could materially affect the result.
 * It must let the user correct or clarify that summary before files are finalized.
 * It must communicate limitations, missing information, and failures in terms the user can understand, and identify what input or action is needed next.
-* User may pause, resume, or restart the session at any time. The product must not lose confirmed requirements when the session is paused or resumed.
+* The user may pause, resume, or restart a session at any time. Pause and resume must preserve and restore the full session state, including confirmed requirements, selected task types and target agent, unresolved questions, and generated drafts. Restart must begin a new session with the prior requirements and choices carried over as editable starting points, but without carrying over generated drafts. Restart must not delete files already generated or other user files.
 
 ### Harness generation
 
 * The product must convert the confirmed requirements into a coherent set of files that define the harness.
+* Generated files and guidance must reflect the selected task type or combination of types, as well as the confirmed requirements.
 * Generated files must follow the selected target agent's supported conventions and formats. The product must not present a harness for an unsupported target as compatible.
 * Depending on the requested harness and supported targets, generated files may include configuration, source code, and documentation. The product must not imply that every harness requires every file type.
 * Files that describe the same behavior must not contain known contradictions. If a requirement cannot be represented or generated, the product must identify it rather than silently omit it.
@@ -76,9 +79,18 @@ The product gathers requirements and generates harness files. It does not promis
 A harness-creation session meets the product requirements when:
 
 * The user can describe a harness request in natural language.
+* The user can select one or more of regular software development, an ML task, or a data science task, and the product uses those selections to guide requirements and generated outputs.
+* The user can select `Other/custom`; the product clarifies the task requirements or explains why it cannot support the task before presenting generated output as complete.
+* The user can select Claude Code or another supported agent as the target. If the target is unsupported or unclear, the product asks for clarification or explains the limitation.
 * The product asks for material missing or unclear information instead of silently guessing.
 * The user can review and correct the captured requirements before final generation.
-* The generated files represent the confirmed requirements consistently, or the product identifies any requirement it could not fulfill.
+* Pausing and resuming restores the full session state, including requirements, task types, target agent, unresolved questions, and generated drafts. Restart creates a fresh session with prior requirements and choices as editable starting points, no carried-over drafts, and no deletion of existing files.
+* The generated files represent the confirmed requirements consistently and follow the selected target agent's supported conventions, or the product identifies any requirement it could not fulfill and does not present unsupported output as compatible.
 * The user can access the outputs and understand their purpose and required setup.
+* User requirements, conversation content, and generated files are protected from access by unauthorized users.
+* Secret values are not exposed in messages, logs, examples, or generated files. The product identifies secrets the user must supply without requesting that the values be included in generated content.
+* Before user data is sent to an external service or model, the product explains which service receives it and the applicable data storage, transmission, and removal practices.
+* The product does not replace or delete existing user content without explaining the effect and obtaining the user's approval.
+* Generated files conform to their declared formats. When automated validation is available, the product runs it and reports the result.
 * Invalid, incomplete, or failed generation is reported as such, with actionable information where possible.
 * User-facing conversation and applicable human-readable output follow the language requirements above.
