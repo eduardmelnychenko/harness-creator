@@ -7,7 +7,7 @@ Before writing any code, complete these steps in order:
 4. Read feature_list.json, if it contains valid data, to understand the current feature status.
 5. Inspect the repository for the relevant code, tests, and documented build or validation commands. Run `bash init.sh` only if that file exists.
 6. If feature_list.json is missing or empty (zero bytes, whitespace only, or a valid feature-list structure with no feature records), initialize it with features directly supported by non-empty docs/PRODUCT.md and docs/ARCHITECTURE.md, and set each status to `not-started`. Preserve the established file structure when one exists. If the documentation is insufficient to identify features or the required file structure, do not create or modify the file; report the gap and ask for guidance instead of guessing. If feature_list.json is invalid JSON or does not match its established structure, preserve it unchanged and report the issue.
-7. If any other required document is missing, empty, or invalid, do not invent its contents until you have specific instructions. Record the gap and continue only when it does not prevent the task. If a build or test fails, determine whether the failure is caused by the current change; fix task-related failures and report unrelated baseline failures without expanding the task.
+7. If any other required document besides progress.md is missing, empty, or invalid, do not invent its contents until you have specific instructions. Record the gap and continue only when it does not prevent the task. If a build or test fails, determine whether the failure is caused by the current change; fix task-related failures and report unrelated baseline failures without expanding the task.
 
 ## Boundaries
 
@@ -22,7 +22,15 @@ Before writing any code, complete these steps in order:
 * Treat one feature, one document, or one clearly scoped logical step as the unit of work for each run.
 * If a request includes multiple units, implement only one unit in the current run. Leave the other units for later instructions; do not continue to them automatically.
 * Complete and verify the current unit against its applicable done conditions before stopping.
+* Before the final response, append a dated entry for the completed unit to progress.md, following the Project History rules below.
 * At the end of the run, summarize the completed work, note any relevant validation or remaining blocker, and suggest the next recommended step. Then stop and wait for the user's next instruction. Do not start the suggested step without that instruction.
+
+## Project History
+
+* Use progress.md as the chronological history of project work. Preserve existing entries and append a new entry after each completed work unit.
+* Include the date, work completed and affected files, tests or other validation with accurate outcomes, tests not run and why, and useful decisions, blockers, or follow-up work.
+* Record facts only. Do not claim a check passed unless it was run, and do not include credentials, secrets, or private user data.
+* If progress.md is missing or empty, create a concise heading before adding the first entry. Do not replace or rewrite existing history; append a correction if an earlier entry needs correction.
 
 ## Conventions
 
