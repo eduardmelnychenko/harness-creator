@@ -1,0 +1,71 @@
+{
+  "features": [
+    {
+      "id": "cli-request-intake",
+      "name": "CLI request intake",
+      "description": "The line-oriented terminal accepts a natural-language harness request and reports the current application limits without implying that files were generated.",
+      "status": "pass",
+      "evidence": [
+        "`uv run harness-creator` accepted a non-empty request and stated that this version does not create harness files.",
+        "`uv run python -m unittest discover -s tests` passed three tests for blank input retry, EOF, and interrupt handling.",
+        "`uv build` created the source distribution and wheel."
+      ]
+    },
+        {
+      "id": "llm-provider-abstraction",
+      "name": "LLM provider abstraction",
+      "description": "The product uses a shared provider-neutral interface with direct adapters for Ollama, OpenAI, Azure OpenAI, Meta's hosted API, Google Gemini, and Anthropic Claude; local Ollama is the default, with configurable provider and model and no silent provider fallback.",
+      "status": "not-started",
+      "evidence": []
+    },
+    {
+      "id": "requirements-gathering-and-review",
+      "name": "Requirements gathering and review",
+      "description": "The product captures purpose, context, constraints, task types, and target; asks focused questions about missing or unclear information; and lets the user review and correct requirements before generation.",
+      "status": "not-started",
+      "evidence": []
+    },
+    {
+      "id": "session-persistence-and-lifecycle",
+      "name": "Session persistence and lifecycle",
+      "description": "SQLite pause and resume restore complete session state; restart carries requirements and choices into a fresh editable session without drafts or deleting files.",
+      "status": "not-started",
+      "evidence": []
+    },
+    {
+      "id": "target-aware-harness-generation",
+      "name": "Target-aware harness generation",
+      "description": "The product generates a coherent set of files from confirmed requirements using supported task profiles, target conventions, and requested output formats, and identifies unsupported requirements.",
+      "status": "not-started",
+      "evidence": []
+    },
+    {
+      "id": "output-validation-and-error-reporting",
+      "name": "Output validation and error reporting",
+      "description": "The product validates generated files where checks are available, reports actionable failures and limitations, and does not present incomplete work as a complete harness.",
+      "status": "not-started",
+      "evidence": []
+    },
+    {
+      "id": "artifact-access-and-write-approval",
+      "name": "Artifact access and write approval",
+      "description": "The product identifies generated files and required setup, distinguishes generated and user-supplied content, and obtains approval before replacing or deleting user content.",
+      "status": "not-started",
+      "evidence": []
+    },
+    {
+      "id": "security-and-secret-handling",
+      "name": "Security and secret handling",
+      "description": "The product protects session content and files from unauthorized access and does not expose secrets in messages, logs, examples, or generated files.",
+      "status": "not-started",
+      "evidence": []
+    },
+    {
+      "id": "data-handling-disclosure",
+      "name": "Data handling disclosure",
+      "description": "The product accurately explains where session content is stored or sent and when it is removed, and discloses external services before sending user data.",
+      "status": "not-started",
+      "evidence": []
+    }
+  ]
+}

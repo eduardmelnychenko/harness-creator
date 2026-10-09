@@ -26,3 +26,12 @@ This log records known project work from 2026-10-07 onward. It is not a complete
 ## History maintenance
 
 Append one dated entry after each completed work unit. Include its scope, affected files, validation outcomes, and any important decisions, blockers, or follow-up work. Do not record secrets or private data.
+
+## 2026-10-09 - Python CLI bootstrap
+
+* Initialized `feature_list.json` with eight capability groups grounded in the product and architecture requirements. Marked CLI request intake as `pass` with test and build evidence; remaining capabilities stay `not-started`.
+* Added a `uv`-managed Python 3.14+ package, `harness-creator` command, and local-only natural-language request prompt. Blank input prompts again; EOF and Ctrl-C exit cleanly. The command states that it does not save or send requests or create harness files.
+* Added focused CLI tests and setup/current-scope instructions in `README.md`. Updated `docs/ARCHITECTURE.md` to distinguish the initial CLI from the target architecture.
+* Affected files: `feature_list.json`, `pyproject.toml`, `uv.lock`, `src/harness_creator/__init__.py`, `src/harness_creator/cli.py`, `tests/test_cli.py`, `README.md`, `docs/ARCHITECTURE.md`, and `progress.md`.
+* Validation: `uv lock --check` and `git diff --check` passed; `uv build` produced a source distribution and wheel; `uv run harness-creator` accepted a piped request; `uv run python -m unittest discover -s tests` passed (3 tests); `feature_list.json` parsed with eight features.
+* Not run: broader product-flow tests do not yet apply because requirements review, generation, validation, and persistence are not implemented.

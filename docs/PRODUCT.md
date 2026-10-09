@@ -28,6 +28,13 @@ The product gathers requirements and generates harness files. It does not promis
 * It must communicate limitations, missing information, and failures in terms the user can understand, and identify what input or action is needed next.
 * The user may pause, resume, or restart a session at any time. Pause and resume must preserve and restore the full session state, including confirmed requirements, selected task types and target agent, unresolved questions, and generated drafts. Restart must begin a new session with the prior requirements and choices carried over as editable starting points, but without carrying over generated drafts. Restart must not delete files already generated or other user files.
 
+### LLM provider configuration
+
+* When the product uses an LLM, it must access providers through a shared provider-neutral interface.
+* The product must support direct adapters for Ollama, OpenAI, Azure OpenAI, Meta's hosted API, Google Gemini, and Anthropic Claude.
+* The default provider must be Ollama at a local endpoint. The user must be able to configure the provider and model.
+* The product must report an unavailable or incorrectly configured provider and must not silently switch to another provider.
+
 ### Harness generation
 
 * The product must convert the confirmed requirements into a coherent set of files that define the harness.

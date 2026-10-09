@@ -2,7 +2,7 @@
 
 ## Status and scope
 
-This document describes a proposed architecture for the product in `docs/PRODUCT.md`. The repository does not currently contain an application implementation, so the components and flows below are design boundaries, not claims about existing code or behavior. The baseline runtime, project tooling, persistence technology, and user interface are selected below. Frameworks, model providers, database schema and location, and deployment topology remain implementation choices.
+This document describes the target architecture for the product in `docs/PRODUCT.md`. The current implementation is an initial line-oriented CLI that accepts one natural-language request; it does not yet implement session coordination, persistence, generation, or validation. The components and flows below are design boundaries, not claims of full product behavior. The baseline runtime, project tooling, persistence technology, user interface, and LLM provider boundary are selected below. Provider SDKs, model selections, database schema and location, and deployment topology remain implementation choices.
 
 The system turns a user's natural-language description into a reviewed, validated set of harness files for a supported task type and target agent. It does not guarantee compatibility with targets or environments that it does not support.
 
@@ -14,6 +14,7 @@ The system turns a user's natural-language description into a reviewed, validate
 | Project and dependency management | Use `uv` to manage the Python project, dependencies, virtual environment, and lockfile. Declare project metadata and dependencies in `pyproject.toml`; keep the generated `uv.lock` in sync with dependency changes. |
 | Session persistence | Use SQLite. Access it through Python's standard-library `sqlite3` module unless a later requirement justifies another dependency. The schema, migration approach, database path, and retention policy are implementation details that must be documented when selected. |
 | User interface | Use a line-oriented interactive terminal interface, not a full-screen TUI. Present a guided prompt-and-response flow that asks one clear question at a time and reports progress, errors, limitations, and generated file locations as readable terminal text. |
+| LLM integration | Use one provider-neutral interface with direct adapters for Ollama, OpenAI, Azure OpenAI, Meta's hosted API, Google Gemini, and Anthropic Claude. Use a local Ollama endpoint by default. The concrete SDKs and supported models are implementation choices. |
 
 These choices define the product's baseline stack; they do not imply that the application or its persistence and terminal flows are implemented.
 
@@ -25,6 +26,7 @@ Keep these responsibilities separate so that conversation, generation, and valid
 | --- | --- |
 | Terminal interface | Implement the line-oriented prompt-and-response flow. Collect the user's request, present one focused question or decision at a time, show progress and limitations, and provide access to generated files. |
 | Session coordinator | Direct the session through requirement gathering, review, generation, and completion. Request clarification when information is missing, ambiguous, or contradictory; do not convert material assumptions into confirmed requirements. |
+| LLM provider interface and adapters | Provide a shared contract for model requests, responses, and errors. Keep provider-specific protocols and configuration behind direct adapters for the supported providers; callers use the shared contract rather than vendor APIs. |
 | Requirements state | Hold the current request, task-type selections, target agent, confirmed answers, unresolved questions, and reviewable summary. Treat confirmed requirements as the shared source for all generated outputs and persist them in SQLite. |
 | Task profiles | Supply focused questions and guidance for software development, ML, data science, and custom tasks. A custom task that cannot be supported must be identified before the result is presented as complete. |
 | Target adapters | Describe a supported agent's conventions and capabilities. Check support before generation; do not label output compatible with an unsupported or unclear target. |
@@ -33,7 +35,9 @@ Keep these responsibilities separate so that conversation, generation, and valid
 | Artifact manager | Present generated files and their purpose, distinguish them from user-supplied content, and identify setup the user must perform. Require approval before replacing or deleting user content. |
 | Session persistence | Use SQLite to save and restore the complete session state needed to pause and resume, including requirements, selections, unresolved questions, and generated drafts. Its database location, retention, and deletion behavior must be explicit to the user. |
 
-External models, tools, or services are dependencies at the boundary of the session coordinator or generation components. Before sending user data to one, explain which service receives it and the applicable storage, transmission, and removal practices. Do not assume a provider or make privacy guarantees that the implementation cannot support.
+Use the local Ollama endpoint by default. The user can configure a supported provider and model; do not silently switch to another provider when the configured one is unavailable. Use the shared interface for both local and external models, while keeping provider-specific credentials in secure runtime configuration rather than session data, generated files, or logs.
+
+Treat only a locally configured Ollama endpoint as local. If the configured Ollama endpoint is remote, or if another external model, tool, or service receives user data, explain which service receives it and the applicable storage, transmission, and removal practices before sending the data. Do not make privacy guarantees that the implementation cannot support.
 
 ## Main flow
 
